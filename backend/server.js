@@ -10,9 +10,10 @@ const cors = require('cors')
 const app = express()
 
 // cors
-app.use(cors({
-  origin: "https://mernappworkouts-production.up.railway.app"
-}))
+const corsOption = {
+  origin: 'https://mernappworkouts-production.up.railway.app/',
+  optionsSuccessStatus: 200
+}
 
 // middleware
 app.use(express.json())
@@ -23,8 +24,8 @@ app.use((req, res, next) => {
 })
 
 // routes
-app.use('/api/workouts', workoutRoutes)
-app.use('/api/user', userRoutes)
+app.use('/api/workouts', cors(corsOption), workoutRoutes)
+app.use('/api/user',cors(corsOption), userRoutes)
 
 // connect to db
 mongoose.connect(process.env.MONGO_URI)
@@ -32,8 +33,9 @@ mongoose.connect(process.env.MONGO_URI)
     console.log('connected to database')
     // listen to port
     app.listen(process.env.PORT, () => {
-      console.log('>_< istening for requests on port', process.env.PORT)
+      console.log(' >_< istening for requests on port', process.env.PORT)
     })
+    
   })
   .catch((err) => {
     console.log(err)
