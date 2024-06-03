@@ -11,7 +11,7 @@ const app = express()
 
 // cors
 const corsOption = {
-  origin: 'https://mernappworkouts-production.up.railway.app',
+  origin: 'https://trinitydev-mernworkout.vercel.app',
   optionsSuccessStatus: 200
 }
 
