@@ -12,7 +12,7 @@ const requireAuth = require('../middleware/requireAuth')
 
 
 const router = express.Router()
-
+//bruhhhh
 // require auth for all workout routesk
 router.use(requireAuth)
 
