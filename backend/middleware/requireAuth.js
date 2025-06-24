@@ -2,6 +2,11 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/userModel')
 
 const requireAuth = async (req, res, next) => {
+    
+    if (req.method === 'OPTIONS') {
+        // bypass preflight request tanpa cek token
+        return res.sendStatus(200);
+      }
 
     // verify authentication
     const { authorization } = req.headers
