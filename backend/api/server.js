@@ -29,9 +29,9 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => {
   console.log('Connected to database');
   // listen to port
-  app.listen(process.env.PORT, () => {
-    console.log('Listening for requests on port', process.env.PORT);
-  });
+  // app.listen(process.env.PORT, () => {
+  //   console.log('Listening for requests on port', process.env.PORT);
+  // });
 })
 .catch((err) => {
   console.error('Error connecting to database:', err.message);
@@ -43,5 +43,5 @@ app.get("/api/rama/bruh", (req, res) => {
 })
 
 // Export app for serverless function
-// module.exports.handler = serverless(app);
-module.exports = app;
+module.exports.handler = serverless(app);
+// module.exports = app;
