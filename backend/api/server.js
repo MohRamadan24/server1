@@ -9,7 +9,9 @@ const serverless = require('serverless-http');
 const app = express();
 
 // Enable CORS for all origins and methods
-app.use(cors());
+app.use(cors({ origin: 'https://trinitydev-mernworkout.vercel.app' }))
+
+app.options('*', cors()); // Tambahan penting untuk menangani OPTIONS preflight
 
 app.use(express.json());
 
