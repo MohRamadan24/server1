@@ -9,9 +9,22 @@ const serverless = require('serverless-http');
 const app = express();
 
 // Enable CORS for all origins and methods
-app.use(cors({ origin: 'https://trinitydev-mernworkout.vercel.app' }))
+app.use(cors({
+  origin: 'https://trinitydev-mernworkout.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
-app.options('*', (req, res) => res.sendStatus(200))
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', 'https://trinitydev-mernworkout.vercel.app')
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    return res.sendStatus(200)
+  }
+  next()
+})
 
 app.use(express.json());
 
