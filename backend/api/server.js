@@ -12,6 +12,12 @@ const app = express();
 
 app.use(cors());
 
+// Enable CORS for all origins and methods
+app.use(cors());
+
+// Handle preflight requests for all routes
+app.options('*', cors());
+
 app.use(express.json());
 
 app.use((req, res, next) => {
