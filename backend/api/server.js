@@ -10,17 +10,9 @@ const app = express();
 
 // Enable CORS for all origins and methods
 app.use(cors());
+app.options('*', cors());
 
-app.use(cors({
-  origin: 'https://trinitydev-mernworkout.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
-
-app.use(express.json({ limit: '1mb' }));
-
-// app.use(express.json());
+app.use(express.json());
 
 app.use((req, res, next) => {
   console.log('Request:', req.path, req.method);
@@ -31,7 +23,6 @@ app.use('/api/workouts', workoutRoutes);
 app.use('/api/user', userRoutes);
 
 // connect to db
-// mongoose.set('strictQuery', true)
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -39,9 +30,9 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => {
   console.log('Connected to database');
   // listen to port
-  // app.listen(process.env.PORT, () => {
-  //   console.log('Listening for requests on port', process.env.PORT);
-  // });
+  app.listen(process.env.PORT, () => {
+    console.log('Listening for requests on port', process.env.PORT);
+  });
 })
 .catch((err) => {
   console.error('Error connecting to database:', err.message);
@@ -53,5 +44,5 @@ app.get("/api/rama/bruh", (req, res) => {
 })
 
 // Export app for serverless function
-module.exports.handler = serverless(app);
-// module.exports = app;
+// module.exports.handler = serverless(app);
+module.exports = app;
