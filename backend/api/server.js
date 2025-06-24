@@ -11,17 +11,16 @@ const app = express();
 // Enable CORS for all origins and methods
 app.use(cors());
 
-app.use((req, res, next) => {
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Origin', 'https://trinitydev-mernworkout.vercel.app')
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    return res.sendStatus(200)
-  }
-  next()
-})
+app.use(cors({
+  origin: 'https://trinitydev-mernworkout.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
+
+// app.use(express.json());
 
 app.use((req, res, next) => {
   console.log('Request:', req.path, req.method);
@@ -32,6 +31,7 @@ app.use('/api/workouts', workoutRoutes);
 app.use('/api/user', userRoutes);
 
 // connect to db
+mongoose.set('strictQuery', true)
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
