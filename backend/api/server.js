@@ -8,14 +8,16 @@ const serverless = require('serverless-http');
 
 const app = express();
 
-// CORS configuration to allow all origins
-
-app.use(cors());
-
 // Enable CORS for all origins and methods
 app.use(cors({
-  origin: 'https://trinitydev-mernworkout.vercel.app'  // allow only your frontend
+  origin: 'https://trinitydev-mernworkout.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
+
+// Preflight handler
+app.options('*', cors());
 
 app.use(express.json());
 
