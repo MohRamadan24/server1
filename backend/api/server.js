@@ -1,38 +1,47 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const workoutRoutes = require('../routes/workouts');
-const userRoutes = require('../routes/user');
+const workoutRoutes = require('../routes/workouts'); // Adjust path as necessary
+const userRoutes = require('../routes/user'); // Adjust path as necessary
 const cors = require('cors');
 const serverless = require('serverless-http');
 
 const app = express();
 
-// Allow all origins and methods
+// Enable CORS for all origins and methods
 app.use(cors());
 
 app.use(express.json());
 
-// Log requests
 app.use((req, res, next) => {
   console.log('Request:', req.path, req.method);
   next();
 });
 
-// Routes
 app.use('/api/workouts', workoutRoutes);
 app.use('/api/user', userRoutes);
-app.get('/api/rama/bruh', (req, res) => {
-  res.json({ message: "Hello World!" });
-});
 
-// DB connect (optional: check if already connected in serverless env)
+// connect to db
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('Connected to DB'))
-.catch((err) => console.error('DB connection error:', err.message));
+.then(() => {
+  console.log('Connected to database');
+  // listen to port
+  app.listen(process.env.PORT, () => {
+    console.log('Listening for requests on port', process.env.PORT);
+  });
+})
+.catch((err) => {
+  console.error('Error connecting to database:', err.message);
+  process.exit(1); // Exit process on database connection error
+});
 
-// Export as serverless function
-module.exports = serverless(app);
+app.get("/api/rama/bruh", (req, res) => {
+  res.json({ message: "Hello World!"});
+})
+
+// Export app for serverless function
+// module.exports.handler = serverless(app);
+module.exports = app;
